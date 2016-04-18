@@ -1,0 +1,27 @@
+#Say hello to slack
+import time
+from slackclient import SlackClient
+
+
+
+
+TOKEN  = "xoxp-35254464561-35239114516-35279347939-a100834ee7"
+PUBLIC_CHANNEL = 'C117B1MUP'
+
+sc = SlackClient(TOKEN)
+
+time = "12:05"
+
+names = ['jbeckhar', 'shuang']
+
+slackified_names = ['@'+i for i in names]
+
+print slackified_names[0]
+
+message_body = "Hello %s  and %s have been challenged and will play at %s" % (names[0], slackified_names[1], time)
+
+print message_body
+
+print sc.api_call(
+    "chat.postMessage", channel=PUBLIC_CHANNEL, text=message_body,
+    username='Darts Commissioner Bot', icon_emoji=':robot_face:')
