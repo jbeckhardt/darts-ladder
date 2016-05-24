@@ -1,8 +1,4 @@
-import os
-import ConfigParser
 
-
-CONFIG_PATH = 'config.ini'
 
 
 Class FunCaptain(object):
@@ -148,32 +144,6 @@ Class Slacker(object):
 	def receive_message(sender, message_body):
 
 
-class DatabaseConnector(object):
-	"""Wrapper for database connection"""
 
-	def __init___(self):
-		self.host = ConfigManager().get_value('host')
-		self.db = ConfigManager().get_value('database')
-		self.user = ConfigManager().get_value('user')
-		self.password = ConfigManager().get_value('password')
-	
-	def read(self,query):
 
-	def insert(self,query):
-
-   
-class ConfigManager(object):
-	"""creates a wrapper for getting config values"""
-
-	def __init__(self):
-		self.config_path = CONFIG_PATH
-
-	def get_value(self, key):
-		"""returns a requested value from the config file"""
-		
-		config = ConfigParser.ConfigParser()
-		config.read(self.config_path)
-		return config.get('all', key)
-
-	
 

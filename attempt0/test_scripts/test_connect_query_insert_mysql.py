@@ -35,23 +35,23 @@ query_with_fetchall("select * from darters")
 
 
 
-def insert_many(query, values):
-    try:
-        cursor = conn.cursor()
-        cursor.executemany(query, values)
-        conn.commit()
-    except Error as e:
-        print('Error:', e)
+# def insert_many(query, values):
+#     try:
+#         cursor = conn.cursor()
+#         cursor.executemany(query, values)
+#         conn.commit()
+#     except Error as e:
+#         print('Error:', e)
  
-    finally:
-        cursor.close()
-        conn.close()
+#     finally:
+#         cursor.close()
+#         conn.close()
  
 
 
-query = "INSERT INTO darters(slack_alias,name) VALUES(%s, %s)"
-values = [('kbeckhar', 'kevin G'),
-		('jbec','Jim Beck'),
-		('ikske','Jolly Ben')]
+# query = "INSERT INTO darters(slack_alias,name) VALUES(%s, %s)"
+# values = [('kbeckhar', 'kevin G'),
+# 		('jbec','Jim Beck'),
+# 		('ikske','Jolly Ben')]
 
-insert_many(query,values)
+# insert_many(query,values)
