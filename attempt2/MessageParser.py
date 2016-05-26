@@ -1,60 +1,72 @@
 # handles phonology, morphology, syntax, semantics, and reasonings steps for understanding as shown in this pipeline architecture
 # here http://stackoverflow.com/questions/9706769/any-tutorials-for-developing-chatbots
 
-from ConfigManager import get_message_type_value
 from collections import Counter
-
-def get_parsed_message(message):
-    '''pulls together other functions to return meaning of message
-
-    returns a json object of the form:
-    {"message_type":message_type,
-    "parsed_message":parsed_message}'''
+from ConfigManager import get_message_type_value
+from DatabaseManager import get_darter_info
 
 
-    message_type = identify_message_type(message)
-    
-    if message_type == 'match_result':
-        parsed_message = parse_match_result_message(message)
-    else:
-        parsed_message = None
+def get_parsed_messages(messages):
+    '''iterates through a list or raw messages and returns a list of parsed_messages
 
-    data_nugget = {"message_type":message_type,
-                    "parsed_message":parsed_message}
+    will only parse message (and return into list of parsed messages) if message_type is identifiable
 
-    return parsed_message
+    '''
+
+    parsed_messages = []
+
+    for message in messages:
+        message_type = get_message_type(message)
+        if message_type == 'match_result':
+            parsed_message = get_parsed_match_result_message(message)
+            parsed_messages.append(parsed_message)
+        else:
+            pass
+
+    return parsed_messages
 
 
 
-def identify_message_type(message):
+def get_message_type(message):
     '''identifies what type of message is sent
 
-    iterates through each word, matches words to message_types, returns most common message_type'''
+    uses rough business logic to determine the message type
+    '''
 
-    words = message.split(' ')
-    
-    potential_message_types = []
-
-    for word in words:
-        message_type_value = get_message_type_value(word)
-        potential_message_types.append(message_type_value)
-
-    message_types = dict(Counter(potential_message_types))
-
-    message_type = max(message_types, key=message_types.get) #http://stackoverflow.com/questions/14091636/get-dict-key-by-max-value
+    if 'i beat' in message['text'].lower():
+        message_type = 'match_result'
+    else:
+        message_type = None 
 
     return message_type
 
 
 
-def parse_match_result_message(message):
+def get_parsed_match_result_message(message):
     '''parses a match_result message
 
-    returns dict of form {'winner_darter_id': winner_darter_id, 'loser_darter_id', loser_darter_id}'''
+    Message must end with the mentioned individual. For example "I beat @jim"
 
+    returns a dict of the form:
+    {"message_type":message_type,
+    "parsed_message":
+        {'winner_darter_id': winner_darter_id, 
+        'loser_darter_id', loser_darter_id,
+        'reported_at': timestamp}}'''
     
+    winner_slack_id = message['user']
+    winner_darter_id = get_darter_info('darter_id', 'slack_id', winner_slack_id)
 
-    match_result = {'winner_darter_id' = winner_darter_id,
-                    'loser_darter_id'= loser_darter_id}
+    loser_slack_id = message['text'][-10:-1]
+    loser_darter_id = get_darter_info('darter_id', 'slack_id', loser_slack_id)
+
+    timestamp = int(float(message['ts']))
+
+    parsed_message = {'message_type': 'match_result',
+                    'parsed_message':
+                        {'winner_darter_id': winner_darter_id,
+                        'loser_darter_id': loser_darter_id,
+                        'reported_at':timestamp}}
 
     return parsed_message
+

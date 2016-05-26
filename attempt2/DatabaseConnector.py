@@ -29,9 +29,8 @@ def read(query):
     except Error as e:
         print(e)
 
-    finally:
-        cursor.close()
-        conn.close()
+    cursor.close()
+    conn.close()
 
 
 def insert(query, values):
@@ -47,21 +46,9 @@ def insert(query, values):
     except Error as e:
         print('Error:', e)
  
-    finally:
-        cursor.close()
-        conn.close()
 
-# def get_cleaned_records(records):
-#     '''cleans the record data by taking the individual records out of tuples
-#     and leaving it as strings
-
-#     Note: only pertains to records from a single column'''
-    
-#     cleaned_records = []
-#     for record in records:
-#         cleaned_record = str(record)[3:-3]
-#         cleaned_records.append(cleaned_record)
-#     return cleaned_records
+    cursor.close()
+    conn.close()
 
 
    

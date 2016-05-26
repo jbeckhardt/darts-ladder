@@ -6,10 +6,11 @@ slack_users = get_slack_users()
 
 darters = []
 
-for slack_users in slack_users:
-    real_name = slack_users['slack_real_name']
-    slack_name = slack_users['slack_name']
-    darter = (slack_name,real_name)
+for slack_user in slack_users:
+    slack_id = slack_user['slack_id']
+    real_name = slack_user['slack_real_name']
+    slack_name = slack_user['slack_name']
+    darter = (slack_name,slack_id, real_name)
     darters.append(darter)
 
 add_darters(darters)
